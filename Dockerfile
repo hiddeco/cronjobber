@@ -7,19 +7,19 @@ RUN mkdir /user \
     && echo 'nobody:x:65534:' > /user/group
 
 RUN apk add --no-cache ca-certificates git
+RUN go get -u github.com/golang/dep/cmd/dep
 
-WORKDIR /src
+WORKDIR ${GOPATH}/src/github.com/hiddeco/cronjobber
 
-COPY ./go.mod ./go.sum ./
-RUN go mod download
+COPY ./Gopkg.toml ./Gopkg.lock ./
+RUN dep ensure -vendor-only
 
 COPY . ./
 
 ARG VERSION
 ARG VCS_REF
 
-RUN GIT_COMMIT=$(git rev-parse HEAD) \
-    && CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w \
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w \
        -X github.com/hiddeco/cronjobber/pkg/version.VERSION=${VERSION} \
        -X github.com/hiddeco/cronjobber/pkg/version.REVISION=${VCS_REF}" \
        -a -installsuffix 'static' -o /cronjobber ./cmd/cronjobber/*
