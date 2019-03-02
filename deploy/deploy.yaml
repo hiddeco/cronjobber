@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cronjobber
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cronjobber
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: cronjobber
+    spec:
+      serviceAccountName: cronjobber
+      containers:
+      - name: cronjobber
+        image: hiddeco/cronjobber:latest
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+        args:
+        - --log-level=info

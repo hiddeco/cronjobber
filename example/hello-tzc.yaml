@@ -1,0 +1,19 @@
+apiVersion: cronjobber.hidde.co/v1alpha1
+kind: TZCronJob
+metadata:
+  name: hello
+spec:
+  schedule: "*/1 * * * *"
+  timeZone: "Europe/Amsterdam"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: busybox
+            args:
+            - /bin/sh
+            - -c
+            - date; echo "Hello, World!"
+          restartPolicy: OnFailure
