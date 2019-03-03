@@ -1,5 +1,5 @@
 TAG?=latest
-VERSION?=unversioned
+VERSION:=$(shell ./scripts/image-tag)
 VCS_REF:=$(shell git rev-parse HEAD)
 BUILD_DATE:=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 BUILD_TARGET?=cronjobber
