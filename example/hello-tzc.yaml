@@ -3,8 +3,8 @@ kind: TZCronJob
 metadata:
   name: hello
 spec:
-  schedule: "*/1 * * * *"
-  timeZone: "Europe/Amsterdam"
+  schedule: "*/5 18 * * *"
+  timezone: "Europe/Amsterdam"
   jobTemplate:
     spec:
       template:
