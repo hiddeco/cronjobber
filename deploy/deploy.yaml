@@ -16,6 +16,13 @@ spec:
         name: cronjobber
     spec:
       serviceAccountName: cronjobber
+      securityContext:
+        fsGroup: 65534 #nobody
+      volumes:
+      - name: timezonedb
+        hostPath:
+          path: /usr/share/zoneinfo
+          type: Directory
       containers:
       - name: cronjobber
         image: quay.io/hiddeco/cronjobber:0.1.0
@@ -25,3 +32,7 @@ spec:
             memory: 64Mi
         args:
         - --log-level=info
+        volumeMounts:
+        - name: timezonedb
+          mountPath: /usr/share/zoneinfo
+          readOnly: true
