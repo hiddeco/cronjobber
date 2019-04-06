@@ -24,7 +24,7 @@ spec:
     - name: Time zone
       type: string
       description: The time zone the interval of a TZCronJob is calculated in
-      JSONPath: .spec.timeZone
+      JSONPath: .spec.timezone
     - name: Last schedule
       type: date
       description: The last time a Job was scheduled by a TZCronJob

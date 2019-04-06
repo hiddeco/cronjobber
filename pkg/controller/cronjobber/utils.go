@@ -99,7 +99,7 @@ func getRecentUnmetScheduleTimes(sj cronjobberv1.TZCronJob, now time.Time) ([]ti
 
 	var earliestTime time.Time
 	if sj.Status.LastScheduleTime != nil {
-		earliestTime = sj.Status.LastScheduleTime.Time
+		earliestTime = sj.Status.LastScheduleTime.Time.In(now.Location())
 	} else {
 		// If none found, then this is either a recently created scheduledJob,
 		// or the active/completed info was somehow lost (contract for status
@@ -111,7 +111,7 @@ func getRecentUnmetScheduleTimes(sj cronjobberv1.TZCronJob, now time.Time) ([]ti
 	}
 	if sj.Spec.StartingDeadlineSeconds != nil {
 		// Controller is not going to schedule anything below this point
-		schedulingDeadline := now.Add(-time.Second * time.Duration(*sj.Spec.StartingDeadlineSeconds))
+		schedulingDeadline := now.Add(-time.Second * time.Duration(*sj.Spec.StartingDeadlineSeconds)).In(now.Location())
 
 		if schedulingDeadline.After(earliestTime) {
 			earliestTime = schedulingDeadline
