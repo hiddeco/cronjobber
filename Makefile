@@ -18,9 +18,19 @@ build:
 		--target $(BUILD_TARGET) \
 		${PWD}
 
+	docker build -t hiddeco/cronjobber-updatetz:$(TAG) \
+		--build-arg VERSION="$(VERSION)" \
+		--build-arg VCS_REF="$(VCS_REF)" \
+		--build-arg BUILD_DATE="$(BUILD_DATE)" \
+		--target $(BUILD_TARGET) \
+		${PWD}/updatetz
+
+
 push:
 	docker tag hiddeco/cronjobber:$(TAG) quay.io/hiddeco/cronjobber:$(VERSION)
 	docker push quay.io/hiddeco/cronjobber:$(VERSION)
+	docker tag hiddeco/cronjobber-updatetz:$(TAG) quay.io/hiddeco/cronjobber-updatetz:$(VERSION)
+	docker push quay.io/hiddeco/cronjobber-updatetz:$(VERSION)
 
 fmt:
 	gofmt -l -s -w $(SOURCE_DIRS)

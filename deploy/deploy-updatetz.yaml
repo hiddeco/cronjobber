@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cronjobber
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cronjobber
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: cronjobber
+    spec:
+      serviceAccountName: cronjobber
+      securityContext:
+        fsGroup: 65534 #nobody
+      volumes:
+      - name: timezonedb
+        emptyDir: {}
+      containers:
+      - name: cronjobber
+        image: quay.io/hiddeco/cronjobber:0.1.1
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+        args:
+        - --log-level=info
+        volumeMounts:
+        - name: timezonedb
+          mountPath: /usr/share/zoneinfo
+          readOnly: true
+      - name: updatetz
+        image: quay.io/hiddeco/cronjobber-updatetz
+        # securityContext:
+          # allowPrivilegeEscalation: false
+          # runAsNonRoot: true
+          # readOnlyRootFilesystem: true
+          # capabilities:
+          #   drop:
+          #   - ALL
+          #   add:
+          #   - FOWNER
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        volumeMounts:
+        - name: timezonedb
+          mountPath: /tmp/zoneinfo
+          readOnly: false
