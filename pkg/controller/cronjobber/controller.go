@@ -140,7 +140,7 @@ func (jm *TZCronJobController) syncAll() {
 		if err != nil {
 			// We validate that the TZCronJob time zone is valid.
 			// However, it is possible that the list of time zones could change at runtime which would cause an error when getting the time.
-			jm.recorder.Eventf(sj, v1.EventTypeWarning, "InvalidTimeZone", "Attempted to run a job with an invalid time zone: %v", sj.Spec.TimeZone)
+			jm.recorder.Eventf(sj, v1.EventTypeWarning, "InvalidTimeZone", "Attempted to run a job with an invalid time zone: %v. %v", sj.Spec.TimeZone, err)
 		}
 
 		syncOne(sj, jobsBySj[sj.UID], tzTime, jm.jobControl, jm.sjControl, jm.recorder, jm.logger)
