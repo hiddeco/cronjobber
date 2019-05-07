@@ -6,7 +6,7 @@ RUN mkdir /user \
     && echo 'nobody:x:65534:65534:nobody:/:' > /user/passwd \
     && echo 'nobody:x:65534:' > /user/group
 
-RUN apk add --no-cache ca-certificates git
+RUN apk add --no-cache ca-certificates git tzdata
 RUN go get -u github.com/golang/dep/cmd/dep
 
 WORKDIR ${GOPATH}/src/github.com/hiddeco/cronjobber
@@ -41,6 +41,7 @@ LABEL maintainer="Hidde Beydals <hello@hidde.co>" \
       org.label-schema.vendor="Hidde Beydals"
 
 COPY --from=builder /user/group /user/passwd /etc/
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /cronjobber /cronjobber
 
 USER nobody:nobody
