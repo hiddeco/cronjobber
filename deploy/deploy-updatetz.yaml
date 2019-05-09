@@ -35,7 +35,7 @@ spec:
           mountPath: /usr/share/zoneinfo
           readOnly: true
       - name: updatetz
-        image: hiddeco/cronjobber-updatetz
+        image: hiddeco/cronjobber-updatetz:0.1.0
         # NB: the security context configuration below may not work
         # out of the box on OpenShift
         securityContext:
