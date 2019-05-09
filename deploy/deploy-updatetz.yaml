@@ -17,6 +17,7 @@ spec:
     spec:
       serviceAccountName: cronjobber
       securityContext:
+        runAsUser: 65534 #nobody
         fsGroup: 65534 #nobody
       volumes:
       - name: timezonedb
@@ -35,16 +36,15 @@ spec:
           mountPath: /usr/share/zoneinfo
           readOnly: true
       - name: updatetz
-        image: quay.io/hiddeco/cronjobber-updatetz
-        # securityContext:
-          # allowPrivilegeEscalation: false
-          # runAsNonRoot: true
-          # readOnlyRootFilesystem: true
-          # capabilities:
-          #   drop:
-          #   - ALL
-          #   add:
-          #   - FOWNER
+        image: hiddeco/cronjobber-updatetz
+        # NB: the security context configuration below may not work
+        # out of the box on OpenShift
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
         resources:
           limits:
             cpu: 100m

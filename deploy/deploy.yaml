@@ -17,6 +17,7 @@ spec:
     spec:
       serviceAccountName: cronjobber
       securityContext:
+        runAsUser: 65534 #nobody
         fsGroup: 65534 #nobody
       volumes:
       - name: timezonedb

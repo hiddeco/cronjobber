@@ -12,6 +12,10 @@ fi
 # If a tagged version, just print that tag
 HEAD_TAGS=$(git tag --points-at HEAD)
 if [ -n "${HEAD_TAGS}" ] ; then
+    # remove updatetz- prefix from updatetz release name
+    if echo "${HEAD_TAGS}" | grep -Eq "updatetz-[0-9]+(\.[0-9]+)*(-[a-z]+)?$"; then
+        HEAD_TAGS=$(echo "$HEAD_TAGS" | cut -c 10-)
+    fi
 	echo ${HEAD_TAGS}
 	exit 0
 fi
