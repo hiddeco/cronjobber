@@ -20,9 +20,7 @@ spec:
         fsGroup: 2 #daemon
       volumes:
       - name: timezonedb
-        hostPath:
-          path: /usr/share/zoneinfo
-          type: Directory
+        emptyDir: {}
       containers:
       - name: cronjobber
         image: quay.io/hiddeco/cronjobber:0.1.1
@@ -36,3 +34,20 @@ spec:
         - name: timezonedb
           mountPath: /usr/share/zoneinfo
           readOnly: true
+      - name: updatetz
+        image: hiddeco/cronjobber-updatetz
+        # NB: the security context configuration below may not work
+        # out of the box on OpenShift
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        volumeMounts:
+        - name: timezonedb
+          mountPath: /tmp/zoneinfo
+          readOnly: false

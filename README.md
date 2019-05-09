@@ -15,15 +15,34 @@ Cronjobber is the cronjob controller from Kubernetes patched with time zone supp
 $ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/deploy/crd.yaml
 # Setup service account and RBAC
 $ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/deploy/rbac.yaml
-# Deploy Cronjobber
+# Deploy Cronjobber (using the timezone db from the node)
 $ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/deploy/deploy.yaml
 ```
+
+### Keeping your timezone database up-to-date
+
+The node Cronjobber runs on may not have a timezone database or it may
+not be updated regularly. To help your overcome this issue there is an
+[`cronjobber-updatetz`](https://quay.io/repository/hiddeco/cronjobber-updatetz)
+image available that can be used as a sidecar.
+
+```sh
+# Deploy Cronjobber (using the updatetz sidecar)
+$ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/deploy/deploy-updatetz.yaml
+```
+
+You may want to tweak the following environment variables to control
+how often it looks for updates and where it puts the timezone database.
+
+- `TZPV` (default: `/tmp/zoneinfo`) is where the timezone database
+  is extracted
+- `REFRESH_PERIOD` (default: `7d`) is how often it looks for updates
 
 ## Usage
 
 Instead of creating a [`CronJob`](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/)
 like you normally would, you create a `TZCronJob`, which works exactly
-the same but supports an additional field: `.spec.timeZone`. Set this
+the same but supports an additional field: `.spec.timezone`. Set this
 to the time zone you wish to schedule your jobs in and Cronjobber will
 take care of the rest.
 

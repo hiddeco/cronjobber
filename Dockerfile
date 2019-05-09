@@ -3,8 +3,8 @@ ARG GO_VERSION=1.11
 FROM golang:${GO_VERSION}-alpine AS builder
 
 RUN mkdir /user \
-    && echo 'nobody:x:65534:65534:nobody:/:' > /user/passwd \
-    && echo 'nobody:x:65534:' > /user/group
+    && echo 'daemon:x:2:2:daemon:/:' > /user/passwd \
+    && echo 'daemon:x:2:' > /user/group
 
 RUN apk add --no-cache ca-certificates git
 RUN go get -u github.com/golang/dep/cmd/dep
@@ -43,7 +43,7 @@ LABEL maintainer="Hidde Beydals <hello@hidde.co>" \
 COPY --from=builder /user/group /user/passwd /etc/
 COPY --from=builder /cronjobber /cronjobber
 
-USER nobody:nobody
+USER daemon:daemon
 
 ENTRYPOINT ["/cronjobber"]
 

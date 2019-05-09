@@ -27,7 +27,11 @@ jobs:
           command: |
             if echo "${CIRCLE_TAG}" | grep -Eq "^[0-9]+(\.[0-9]+)*(-[a-z]+)?$"; then
               docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" quay.io
-              make push
+              make push/cronjobber
+            fi
+            if echo "${CIRCLE_TAG}" | grep -Eq "updatetz-[0-9]+(\.[0-9]+)*(-[a-z]+)?$"; then
+              docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" quay.io
+              make push/updatetz
             fi
 
 workflows:
@@ -37,4 +41,4 @@ workflows:
       - build:
           filters:
             tags:
-              only: /[0-9]+(\.[0-9]+)*(-[a-z]+)?/
+              only: /(updatetz-)?[0-9]+(\.[0-9]+)*(-[a-z]+)?/

@@ -10,7 +10,9 @@ TEST_FLAGS?=
 run:
 	go run cmd/cronjobber/* -kubeconfig=${HOME}/.kube/config -log-level=info
 
-build:
+build: build/cronjobber build/updatetz
+
+build/cronjobber:
 	docker build -t hiddeco/cronjobber:$(TAG) \
 		--build-arg VERSION="$(VERSION)" \
 		--build-arg VCS_REF="$(VCS_REF)" \
@@ -18,9 +20,21 @@ build:
 		--target $(BUILD_TARGET) \
 		${PWD}
 
-push:
+build/updatetz:
+	docker build -t hiddeco/cronjobber-updatetz:$(TAG) \
+		--build-arg VCS_REF="$(VCS_REF)" \
+		--build-arg BUILD_DATE="$(BUILD_DATE)" \
+		${PWD}/updatetz
+
+push: push/cronjobber push/updatetz
+
+push/cronjobber:
 	docker tag hiddeco/cronjobber:$(TAG) quay.io/hiddeco/cronjobber:$(VERSION)
 	docker push quay.io/hiddeco/cronjobber:$(VERSION)
+
+push/updatetz:
+	docker tag hiddeco/cronjobber-updatetz:$(TAG) quay.io/hiddeco/cronjobber-updatetz:$(VERSION)
+	docker push quay.io/hiddeco/cronjobber-updatetz:$(VERSION)
 
 fmt:
 	gofmt -l -s -w $(SOURCE_DIRS)
