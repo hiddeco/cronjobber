@@ -23,7 +23,7 @@ spec:
         emptyDir: {}
       containers:
       - name: cronjobber
-        image: quay.io/hiddeco/cronjobber:0.1.1
+        image: quay.io/hiddeco/cronjobber:0.2.0
         resources:
           requests:
             cpu: 50m
