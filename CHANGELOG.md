@@ -1,3 +1,20 @@
+## 0.2.0 (2019-05-10)
+  
+### Improvements
+
+- Support host independent timezone database
+  [hiddeco/cronjobber#10][#10]
+- Log detailed error message on invalid timezone
+  [hiddeco/cronjobber#11][#11] 
+- Switch to `daemon` user and group as `nobody`
+  should only be used as a placeholder for
+  "unmapped" users and user ids in NFS tree
+  exports
+  [hiddeco/cronjobber#10][#10]
+
+[#10]: https://github.com/hiddeco/cronjobber/pull/10
+[#11]: https://github.com/hiddeco/cronjobber/pull/11
+
 ## 0.1.1 (2019-04-06)
 
 ### Fixes
