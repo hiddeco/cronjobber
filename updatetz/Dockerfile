@@ -18,7 +18,7 @@ COPY updatetz.sh /usr/local/bin
 COPY docker-entrypoint.sh /usr/local/bin
 
 WORKDIR /tmp
-USER nobody
+USER daemon:daemon
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 

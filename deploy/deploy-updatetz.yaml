@@ -17,8 +17,7 @@ spec:
     spec:
       serviceAccountName: cronjobber
       securityContext:
-        runAsUser: 65534 #nobody
-        fsGroup: 65534 #nobody
+        fsGroup: 2 #daemon
       volumes:
       - name: timezonedb
         emptyDir: {}
@@ -41,7 +40,6 @@ spec:
         # out of the box on OpenShift
         securityContext:
           allowPrivilegeEscalation: false
-          runAsNonRoot: true
           capabilities:
             drop:
             - ALL
