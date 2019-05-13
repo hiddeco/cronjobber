@@ -13,7 +13,7 @@ mkdir -p -m 755 "$TZPV"
 
 UPSTREAM_VERSION=$(apk -q --no-cache --no-progress info tzdata -d | awk -F- 'NR==1{print $2}')
 
-if [ ! -f ${TZPV}/version ] || [ "$UPSTREAM_VERSION" != "$(cat ${TZPV}/version 2>/dev/null)" ]; then
+if [ ! -f ${TZPV}/version ] || [ "$UPSTREAM_VERSION" != "$(cat ${TZPV}/version)" ]; then
 	SCRATCH=$(mktemp -d)
 	cd "$SCRATCH"
 	apk -q --no-cache --no-progress fetch tzdata
