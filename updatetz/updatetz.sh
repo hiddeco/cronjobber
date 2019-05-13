@@ -13,7 +13,7 @@ mkdir -p -m 755 "$TZPV"
 
 UPSTREAM_VERSION=$(apk -q --no-cache --no-progress info tzdata -d | awk -F- 'NR==1{print $2}')
 
-if [ ! -f ${TZPV}/version ] || [ "$UPSTREAM_VERSION" != "$(cat ${TZPV}/version)" ]; then
+if [ ! -f ${TZPV}/version ] || [ "$UPSTREAM_VERSION" != "$(cat ${TZPV}/version 2>/dev/null)" ]; then
 	SCRATCH=$(mktemp -d)
 	cd "$SCRATCH"
 	apk -q --no-cache --no-progress fetch tzdata
@@ -21,7 +21,7 @@ if [ ! -f ${TZPV}/version ] || [ "$UPSTREAM_VERSION" != "$(cat ${TZPV}/version)"
 	cd usr/share/zoneinfo/
 	tar cf - ./* | tar moxf - -C "$TZPV" # Overwrites existing files
 	"${SCRATCH}/usr/sbin/zic" --version | awk '{print $NF}' > "${TZPV}/version"
-	log "Local Time Zone database updated to version $(cat version) on $TZPV"
+	log "Local Time Zone database updated to version $(cat ${TZPV}/version) on $TZPV"
 	# Cleanup
 	find "$TZPV" -mindepth 1 -mmin +5 -delete # Delete old files/folders
 	rm -rf "$SCRATCH"
