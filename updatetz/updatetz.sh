@@ -19,14 +19,12 @@ if [ ! -f ${TZPV}/version ] || [ "$UPSTREAM_VERSION" != "$(cat ${TZPV}/version)"
 	apk -q --no-cache --no-progress fetch tzdata
 	tar xzf tzdata*.apk
 	cd usr/share/zoneinfo/
-	tar cf zoneinfo.tar * # Add zone files to tarball
-	mv -f zoneinfo.tar "$TZPV" # Copy tarball to TZPV
-	cd "$TZPV"
-	tar xf zoneinfo.tar # Extract tarball (overwrites existing files)
-	rm -f zoneinfo.tar
-	${SCRATCH}/usr/sbin/zic --version | awk '{print $3}' > version
+	tar cf - ./* | tar moxf - -C "$TZPV" # Overwrites existing files
+	"${SCRATCH}/usr/sbin/zic" --version | awk '{print $NF}' > "${TZPV}/version"
 	log "Local Time Zone database updated to version $(cat version) on $TZPV"
-	rm -rf ${SCRATCH}
+	# Cleanup
+	find "$TZPV" -mindepth 1 -mmin +5 -delete # Delete old files/folders
+	rm -rf "$SCRATCH"
 else
 	log 'Local Time Zone database is up to date'
 fi
