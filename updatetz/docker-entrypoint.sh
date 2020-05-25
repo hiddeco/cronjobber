@@ -25,10 +25,16 @@ retry() {
 			return 1
 		fi
 	done
+	touch /tmp/updatetz_atleastonce_ok
 }
 
+rm -f /tmp/updatetz_atleastonce_ok
+INIT_CONTAINER="${INIT_CONTAINER:-false}"
 retry updatetz.sh
 while true; do
+	if [ "true" = "$INIT_CONTAINER" ] && [ -f /tmp/updatetz_atleastonce_ok ]; then # Update TZ db only once as an init container if set as "true"
+		exit 0
+	fi
 	sleep "${REFRESH_INTERVAL:=7d}"
 	retry updatetz.sh
 done
