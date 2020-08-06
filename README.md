@@ -36,7 +36,7 @@ how often it looks for updates and where it puts the timezone database.
 
 - `TZPV` (default: `/tmp/zoneinfo`) is where the timezone database
   is extracted
-- `REFRESH_PERIOD` (default: `7d`) is how often it looks for updates
+- `REFRESH_INTERVAL` (default: `7d`) is how often it looks for updates
 
 ## Usage
 
