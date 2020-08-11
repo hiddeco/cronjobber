@@ -33,13 +33,8 @@ spec:
       initContainers:
       - name: init-updatetz
         image: {{ printf "%s:%s" .Values.sidecar.image.repository .Values.sidecar.image.tag | quote }}
-        # NB: the security context configuration below may not work
-        # out of the box on OpenShift
         securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
+{{ toYaml .Values.sidecar.securityContext | indent 10 }}
         resources:
           limits:
             cpu: {{ .Values.sidecar.resources.requests.cpu }}
@@ -73,10 +68,7 @@ spec:
         # NB: the security context configuration below may not work
         # out of the box on OpenShift
         securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
+{{ toYaml .Values.sidecar.securityContext | indent 10 }}
         resources:
           limits:
             cpu: {{ .Values.sidecar.resources.requests.cpu }}
