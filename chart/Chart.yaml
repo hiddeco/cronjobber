@@ -1,0 +1,8 @@
+apiVersion: v1
+name: cronjobber
+home: https://github.com/hiddeco/cronjobber
+version: 0.1.0
+appVersion: 0.2.0
+description: Cronjobber is the cronjob controller from Kubernetes patched with time zone support.
+maintainers:
+- name: CyberHippo
