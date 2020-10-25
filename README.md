@@ -21,8 +21,15 @@ $ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/d
 
 ### Keeping your timezone database up-to-date
 
-The node Cronjobber runs on may not have a timezone database or it may
-not be updated regularly. To help your overcome this issue there is an
+> :warning: **Note:** the approach below does not work at present due to an
+> issue with Go which causes it to silently fail on `slim` timezone database
+> formats (the default since `tzdata>=2020-b`) ([go#42138](https://github.com/golang/go/issues/42138)).
+>
+> It is therefore advised to use the `deploy.yaml` with the embedded timezone
+> database until this issue has been resolved.
+
+Cronjobber embeds a default timezone database in its binary, this database is
+however not updated regulary. To help your overcome this issue there is an
 [`cronjobber-updatetz`](https://quay.io/repository/hiddeco/cronjobber-updatetz)
 image available that can be used as a sidecar.
 
