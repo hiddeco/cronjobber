@@ -22,7 +22,7 @@ The following table lists the configurable parameters of the cronjobber chart an
 | `name`                  | Name of the resources                 | `cronjobber`                                               |
 | `namespace`             | Namespace to deploy the resources     | `default`                                                  |
 | `image.repository`      | Container image name                  | `quay.io/hiddeco/cronjobber`                               |
-| `image.tag`             | Container image tag                   | `0.2.0`                                                    |
+| `image.tag`             | Container image tag                   | `0.3.0`                                                    |
 | `replicas`              | Number of replicas                    | `1`                                                        |
 | `resources.requests.cpu`| CPU request for the main container    | `50m`                                                      |
 | `resources.requests.memory`| Memory request for the main container | `64Mi`                                                  |

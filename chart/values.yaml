@@ -2,7 +2,7 @@ name: cronjobber
 namespace: default
 image:
   repository: quay.io/hiddeco/cronjobber
-  tag: 0.2.0
+  tag: 0.3.0
 replicas: 1
 resources:
   requests:

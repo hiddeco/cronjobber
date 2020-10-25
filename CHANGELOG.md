@@ -1,5 +1,16 @@
+## 0.3.0 (2020-10-25)
+
+### Improvements
+
+- Update to Go `1.15`
+  [hiddeco/cronjobber#14][#14]
+- Embed a default timezone database in the binary
+  [hiddeco/cronjobber#14][#14]
+
+[#14]: https://github.com/hiddeco/cronjobber/pull/14
+
 ## 0.2.0 (2019-05-10)
-  
+
 ### Improvements
 
 - Support host independent timezone database

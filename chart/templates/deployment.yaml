@@ -23,11 +23,6 @@ spec:
       volumes:
       - name: timezonedb
         emptyDir: {}
-      {{- else }}
-      volumes:
-      - name: timezonedb
-        hostPath:
-          path: /usr/share/zoneinfo
       {{- end }}
       {{- if .Values.sidecar.enabled }}
       initContainers:
@@ -58,10 +53,12 @@ spec:
             memory: {{ .Values.resources.requests.memory }}
         args:
         - --log-level=info
+        {{- if .Values.sidecar.enabled }}
         volumeMounts:
         - name: timezonedb
           mountPath: /usr/share/zoneinfo
           readOnly: true
+        {{- end }}
       {{- if .Values.sidecar.enabled }}
       - name: updatetz
         image: {{ printf "%s:%s" .Values.sidecar.image.repository .Values.sidecar.image.tag | quote }}
