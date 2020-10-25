@@ -5,6 +5,7 @@ import (
 	"k8s.io/klog"
 	"log"
 	"time"
+	_ "time/tzdata"
 
 	clientset "github.com/hiddeco/cronjobber/pkg/client/clientset/versioned"
 	informers "github.com/hiddeco/cronjobber/pkg/client/informers/externalversions"
