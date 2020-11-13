@@ -216,3 +216,7 @@ func getCurrentTimeInZone(sj *cronjobberv1.TZCronJob) (time.Time, error) {
 
 	return time.Now().In(loc), nil
 }
+
+func pointerInt32(i int32) *int32 {
+	return &i
+}
