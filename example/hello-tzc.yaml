@@ -10,10 +10,10 @@ spec:
       template:
         spec:
           containers:
-          - name: hello
-            image: busybox
-            args:
-            - /bin/sh
-            - -c
-            - date; echo "Hello, World!"
+            - name: hello
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - date; echo "Hello, World!"
           restartPolicy: OnFailure

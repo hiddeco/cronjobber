@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck shell=bash
 
 # Copyright 2017 The Kubernetes Authors.
 #

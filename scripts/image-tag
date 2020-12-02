@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck shell=bash
 
 set -o errexit
 set -o nounset
@@ -16,7 +17,7 @@ if [ -n "${HEAD_TAGS}" ] ; then
     if echo "${HEAD_TAGS}" | grep -Eq "updatetz-[0-9]+(\.[0-9]+)*(-[a-z]+)?$"; then
         HEAD_TAGS=$(echo "$HEAD_TAGS" | cut -c 10-)
     fi
-	echo ${HEAD_TAGS}
+	echo "${HEAD_TAGS}"
 	exit 0
 fi
 
@@ -33,6 +34,6 @@ BRANCH_PREFIX=${BRANCH_PREFIX//[\/\\]/-}
 # now, clean out anything that's not alphanumeric or an dash
 BRANCH_PREFIX=${BRANCH_PREFIX//[^a-zA-Z0-9-]/}
 # finally, lowercase with TR
-BRANCH_PREFIX=`echo -n $BRANCH_PREFIX | tr A-Z a-z`
+BRANCH_PREFIX=$(echo -n "${BRANCH_PREFIX}" | tr '[:upper:]' '[:lower:]')
 
 echo "$BRANCH_PREFIX-$(git rev-parse --short HEAD)$WORKING_SUFFIX"

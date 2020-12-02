@@ -19,35 +19,58 @@ spec:
       securityContext:
         fsGroup: 2 #daemon
       volumes:
-      - name: timezonedb
-        emptyDir: {}
+        - name: timezonedb
+          emptyDir: {}
+      initContainers:
+        - name: init-updatetz
+          image: quay.io/hiddeco/cronjobber-updatetz:0.1.1
+          # NB: the security context configuration below may not work
+          # out of the box on OpenShift
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+          volumeMounts:
+            - name: timezonedb
+              mountPath: /tmp/zoneinfo
+              readOnly: false
+          env:
+            - name: INIT_CONTAINER
+              value: "true"
+            - name: REFRESH_INTERVAL
+              value: "3s"
       containers:
-      - name: cronjobber
-        image: quay.io/hiddeco/cronjobber:0.2.0
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-        args:
-        - --log-level=info
-        volumeMounts:
-        - name: timezonedb
-          mountPath: /usr/share/zoneinfo
-          readOnly: true
-      - name: updatetz
-        image: quay.io/hiddeco/cronjobber-updatetz:0.1.0
-        # NB: the security context configuration below may not work
-        # out of the box on OpenShift
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-        resources:
-          limits:
-            cpu: 100m
-            memory: 64Mi
-        volumeMounts:
-        - name: timezonedb
-          mountPath: /tmp/zoneinfo
-          readOnly: false
+        - name: cronjobber
+          image: quay.io/hiddeco/cronjobber:0.3.0
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          args:
+            - --log-level=info
+          volumeMounts:
+            - name: timezonedb
+              mountPath: /usr/share/zoneinfo
+              readOnly: true
+        - name: updatetz
+          image: quay.io/hiddeco/cronjobber-updatetz:0.1.1
+          # NB: the security context configuration below may not work
+          # out of the box on OpenShift
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+          volumeMounts:
+            - name: timezonedb
+              mountPath: /tmp/zoneinfo
+              readOnly: false

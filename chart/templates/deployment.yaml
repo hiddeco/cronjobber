@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      name: {{ .Values.name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.name }}
+    spec:
+      serviceAccountName: {{ .Values.name }}
+      securityContext:
+        fsGroup: 2 #daemon
+      {{- if .Values.sidecar.enabled }}
+      volumes:
+        - name: timezonedb
+          emptyDir: {}
+      {{- end }}
+      {{- if .Values.sidecar.enabled }}
+      initContainers:
+        - name: init-updatetz
+          image: {{ printf "%s:%s" .Values.sidecar.image.repository .Values.sidecar.image.tag | quote }}
+          securityContext:
+{{ toYaml .Values.sidecar.securityContext | indent 12 }}
+          resources:
+            limits:
+              cpu: {{ .Values.sidecar.resources.requests.cpu }}
+              memory: {{ .Values.sidecar.resources.requests.memory }}
+          volumeMounts:
+            - name: timezonedb
+              mountPath: /tmp/zoneinfo
+              readOnly: false
+          env:
+            - name: INIT_CONTAINER
+              value: "true"
+            - name: REFRESH_INTERVAL
+              value: "3s"
+      {{- end }}
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ printf "%s:%s" .Values.image.repository .Values.image.tag | quote }}
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+          args:
+            - --log-level=info
+          {{- if .Values.sidecar.enabled }}
+          volumeMounts:
+            - name: timezonedb
+              mountPath: /usr/share/zoneinfo
+              readOnly: true
+          {{- end }}
+      {{- if .Values.sidecar.enabled }}
+        - name: updatetz
+          image: {{ printf "%s:%s" .Values.sidecar.image.repository .Values.sidecar.image.tag | quote }}
+          # NB: the security context configuration below may not work
+          # out of the box on OpenShift
+          securityContext:
+{{ toYaml .Values.sidecar.securityContext | indent 12 }}
+          resources:
+            limits:
+              cpu: {{ .Values.sidecar.resources.requests.cpu }}
+              memory: {{ .Values.sidecar.resources.requests.memory }}
+          volumeMounts:
+            - name: timezonedb
+              mountPath: /tmp/zoneinfo
+              readOnly: false
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
