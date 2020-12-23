@@ -4,19 +4,19 @@ kind: CustomResourceDefinition
 metadata:
   name: tzcronjobs.cronjobber.hidde.co
 spec:
-    group: cronjobber.hidde.co
-    version: v1alpha1
-    names:
-      plural: tzcronjobs
-      singular: tzcronjob
-      kind: TZCronJob
-      listKind: TZCronJobList
-      shortNames:
+  group: cronjobber.hidde.co
+  version: v1alpha1
+  names:
+    plural: tzcronjobs
+    singular: tzcronjob
+    kind: TZCronJob
+    listKind: TZCronJobList
+    shortNames:
       - tzc
-    scope: Namespaced
-    subresources:
-      status: {}
-    additionalPrinterColumns:
+  scope: Namespaced
+  subresources:
+    status: {}
+  additionalPrinterColumns:
     - name: Schedule
       type: string
       description: The schedule defining the interval a TZCronJob is run

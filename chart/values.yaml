@@ -24,4 +24,5 @@ sidecar:
     allowPrivilegeEscalation: false
     capabilities:
       drop:
-      - ALL
+        - ALL
+nodeSelector: {}

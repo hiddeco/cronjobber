@@ -13,15 +13,15 @@ metadata:
   labels:
     name: cronjobber
 rules:
-- apiGroups: ['cronjobber.hidde.co']
-  resources: ['*']
-  verbs: ['*']
-- apiGroups: ['batch']
-  resources: ['jobs']
-  verbs: ['*']
-- apiGroups: ['']
-  resources: ['events']
-  verbs: ['create', 'patch', 'update']
+  - apiGroups: ['cronjobber.hidde.co']
+    resources: ['*']
+    verbs: ['*']
+  - apiGroups: ['batch']
+    resources: ['jobs']
+    verbs: ['*']
+  - apiGroups: ['']
+    resources: ['events']
+    verbs: ['create', 'patch', 'update']
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -34,6 +34,6 @@ roleRef:
   kind: ClusterRole
   name: cronjobber
 subjects:
-- kind: ServiceAccount
-  name: cronjobber
-  namespace: default
+  - kind: ServiceAccount
+    name: cronjobber
+    namespace: default

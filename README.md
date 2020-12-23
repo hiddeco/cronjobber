@@ -29,7 +29,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/d
 > database until this issue has been resolved.
 
 Cronjobber embeds a default timezone database in its binary, this database is
-however not updated regulary. To help your overcome this issue there is an
+however not updated regularly. To help your overcome this issue there is an
 [`cronjobber-updatetz`](https://quay.io/repository/hiddeco/cronjobber-updatetz)
 image available that can be used as a sidecar.
 
@@ -66,12 +66,12 @@ spec:
       template:
         spec:
           containers:
-          - name: hello
-            image: busybox
-            args:
-            - /bin/sh
-            - -c
-            - date; echo "Hello, World!"
+            - name: hello
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - date; echo "Hello, World!"
           restartPolicy: OnFailure
 ```
 
