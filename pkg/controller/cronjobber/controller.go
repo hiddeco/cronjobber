@@ -151,13 +151,9 @@ func (jm *TZCronJobController) syncAll() {
 // cleanupFinishedJobs cleanups finished jobs created by a TZCronJob
 func cleanupFinishedJobs(sj *cronjobberv1.TZCronJob, js []batchv1.Job, jc jobControlInterface,
 	sjc sjControlInterface, recorder record.EventRecorder, logger *zap.SugaredLogger) {
-	// According to the documentation and the behaviour of the original cronjob we set the default values:
-	if sj.Spec.FailedJobsHistoryLimit == nil {
-		sj.Spec.FailedJobsHistoryLimit = pointerInt32(1)
-	}
-
-	if sj.Spec.SuccessfulJobsHistoryLimit == nil {
-		sj.Spec.SuccessfulJobsHistoryLimit = pointerInt32(3)
+	// If neither limits are active, there is no need to do anything.
+	if sj.Spec.FailedJobsHistoryLimit == nil && sj.Spec.SuccessfulJobsHistoryLimit == nil {
+		return
 	}
 
 	failedJobs := []batchv1.Job{}
@@ -172,19 +168,23 @@ func cleanupFinishedJobs(sj *cronjobberv1.TZCronJob, js []batchv1.Job, jc jobCon
 		}
 	}
 
-	removeOldestJobs(sj,
-		succesfulJobs,
-		jc,
-		*sj.Spec.SuccessfulJobsHistoryLimit,
-		recorder,
-		logger)
+	if sj.Spec.SuccessfulJobsHistoryLimit != nil {
+		removeOldestJobs(sj,
+			succesfulJobs,
+			jc,
+			*sj.Spec.SuccessfulJobsHistoryLimit,
+			recorder,
+			logger)
+	}
 
-	removeOldestJobs(sj,
-		failedJobs,
-		jc,
-		*sj.Spec.FailedJobsHistoryLimit,
-		recorder,
-		logger)
+	if sj.Spec.FailedJobsHistoryLimit != nil {
+		removeOldestJobs(sj,
+			failedJobs,
+			jc,
+			*sj.Spec.FailedJobsHistoryLimit,
+			recorder,
+			logger)
+	}
 
 	// Update the TZCronJob, in case jobs were removed from the list.
 	if _, err := sjc.UpdateStatus(sj); err != nil {
