@@ -149,27 +149,20 @@ func getRecentUnmetScheduleTimes(sj cronjobberv1.TZCronJob, now time.Time) ([]ti
 }
 
 // getJobFromTemplate makes a Job from a CronJob
-func getJobFromTemplate(sj *cronjobberv1.TZCronJob, scheduledTime time.Time) (*batchv1.Job, error) {
+func getJobFromTemplate(sj *cronjobberv1.TZCronJob) (*batchv1.Job, error) {
 	labels := copyLabels(&sj.Spec.JobTemplate)
 	annotations := copyAnnotations(&sj.Spec.JobTemplate)
-	// We want job names for a given nominal start time to have a deterministic name to avoid the same job being created twice
-	name := fmt.Sprintf("%s-%d", sj.Name, getTimeHash(scheduledTime))
 
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Labels:          labels,
 			Annotations:     annotations,
-			Name:            name,
+			GenerateName:    sj.Name,
 			OwnerReferences: []metav1.OwnerReference{*metav1.NewControllerRef(sj, controllerKind)},
 		},
 		Spec: sj.Spec.JobTemplate.Spec,
 	}
 	return job, nil
-}
-
-// getTimeHash returns Unix Epoch Time
-func getTimeHash(scheduledTime time.Time) int64 {
-	return scheduledTime.Unix()
 }
 
 func getFinishedStatus(j *batchv1.Job) (bool, batchv1.JobConditionType) {

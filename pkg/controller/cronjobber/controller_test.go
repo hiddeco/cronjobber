@@ -18,6 +18,7 @@ limitations under the License.
 package cronjobber
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"testing"
@@ -271,7 +272,7 @@ func TestSyncOne_RunOrNot(t *testing.T) {
 		if tc.ranPreviously {
 			sj.ObjectMeta.CreationTimestamp = metav1.Time{Time: justBeforeThePriorHour()}
 			sj.Status.LastScheduleTime = &metav1.Time{Time: justAfterThePriorHour()}
-			job, err = getJobFromTemplate(&sj, sj.Status.LastScheduleTime.Time)
+			job, err = getJobFromTemplate(&sj)
 			if err != nil {
 				t.Fatalf("%s: nexpected error creating a job from template: %v", name, err)
 			}
@@ -522,13 +523,14 @@ func TestCleanupFinishedJobs_DeleteOrNot(t *testing.T) {
 		sj.Status.Active = []v1.ObjectReference{}
 
 		for i, spec := range tc.jobSpecs {
-			job, err = getJobFromTemplate(&sj, startTimeStringToTime(spec.StartTime))
+			job, err = getJobFromTemplate(&sj)
 			if err != nil {
 				t.Fatalf("%s: unexpected error creating a job from template: %v", name, err)
 			}
 
 			job.UID = types.UID(strconv.Itoa(i))
 			job.Namespace = ""
+			job.Name = fmt.Sprintf("%s-%d", sj.Name, i)
 
 			if spec.IsFinished {
 				var conditionType batchv1.JobConditionType
