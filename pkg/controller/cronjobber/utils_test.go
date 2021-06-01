@@ -18,7 +18,6 @@ limitations under the License.
 package cronjobber
 
 import (
-	"strings"
 	"testing"
 	"time"
 
@@ -77,11 +76,11 @@ func TestGetJobFromTemplate(t *testing.T) {
 	}
 
 	var job *batchv1.Job
-	job, err := getJobFromTemplate(&sj, time.Time{})
+	job, err := getJobFromTemplate(&sj)
 	if err != nil {
 		t.Errorf("Did not expect error: %s", err)
 	}
-	if !strings.HasPrefix(job.ObjectMeta.Name, "mycronjob-") {
+	if job.ObjectMeta.GenerateName != "mycronjob" {
 		t.Errorf("Wrong Name")
 	}
 	if len(job.ObjectMeta.Labels) != 1 {
