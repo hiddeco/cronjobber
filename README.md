@@ -77,8 +77,8 @@ spec:
 
 ## Reasoning
 
-There has been a [long outstanding (and now closed) issue](https://github.com/kubernetes/kubernetes/issues/47202)
-to add time zone support to the `CronJob` kind in Kubernetes, including
+There has been a [long outstanding issue](https://github.com/kubernetes/kubernetes/issues/47202)
+to add time zone support to the `CronJob` API in Kubernetes, including
 a [fully working PR](https://github.com/kubernetes/kubernetes/pull/47266)
 which actually made it possible. SIG Apps and in SIG Architecture
 decided however against adding it because of the downside of having
