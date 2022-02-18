@@ -1,8 +1,4 @@
-# Ignore all
-**
-
-# But allow these
-!/cmd/**
-!/pkg/**
-!Dockerfile
-!Gopkg.*
+# More info: https://docs.docker.com/engine/reference/builder/#dockerignore-file
+# Ignore build and test binaries.
+bin/
+testbin/

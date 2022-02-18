@@ -11,40 +11,10 @@ Cronjobber is the cronjob controller from Kubernetes patched with time zone supp
 ## Installation
 
 ```sh
-# Install CustomResourceDefinition
-$ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/deploy/crd.yaml
-# Setup service account and RBAC
-$ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/deploy/rbac.yaml
-# Deploy Cronjobber (using the timezone db from the node)
-$ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/deploy/deploy.yaml
+# Install Controller
+https://raw.githubusercontent.com/kkothule/cronjobber/master/deploy/manifests.yaml
+
 ```
-
-### Keeping your timezone database up-to-date
-
-> :warning: **Note:** the approach below does not work at present due to an
-> issue with Go which causes it to silently fail on `slim` timezone database
-> formats (the default since `tzdata>=2020-b`) ([go#42138](https://github.com/golang/go/issues/42138)).
->
-> It is therefore advised to use the `deploy.yaml` with the embedded timezone
-> database until this issue has been resolved.
-
-Cronjobber embeds a default timezone database in its binary, this database is
-however not updated regularly. To help your overcome this issue there is an
-[`cronjobber-updatetz`](https://quay.io/repository/hiddeco/cronjobber-updatetz)
-image available that can be used as a sidecar.
-
-```sh
-# Deploy Cronjobber (using the updatetz sidecar)
-$ kubectl apply -f https://raw.githubusercontent.com/hiddeco/cronjobber/master/deploy/deploy-updatetz.yaml
-```
-
-You may want to tweak the following environment variables to control
-how often it looks for updates and where it puts the timezone database.
-
-- `TZPV` (default: `/tmp/zoneinfo`) is where the timezone database
-  is extracted
-- `REFRESH_INTERVAL` (default: `7d`) is how often it looks for updates
-
 ## Usage
 
 Instead of creating a [`CronJob`](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/)
@@ -103,3 +73,4 @@ the original source code of these components below.
 
 * [Kubernetes CronJob controller](https://github.com/kubernetes/kubernetes/tree/v1.13.3/pkg/controller/cronjob)
 * [kubernetes/kubernetes#47266](https://github.com/kubernetes/kubernetes/pull/47266) by Adam Sunderland
+* https://book.kubebuilder.io/quick-start.html
