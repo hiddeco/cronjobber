@@ -1,0 +1,6 @@
+apiVersion: cronjobber.hidde.co/v1alpha1
+kind: TZCronJob
+metadata:
+  name: tzcronjob-sample
+spec:
+  # TODO(user): Add fields here
