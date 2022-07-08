@@ -18,18 +18,18 @@ spec:
     - name: Schedule
       type: string
       description: The schedule defining the interval a TZCronJob is run
-      JSONPath: .spec.schedule
+      jsonPath: .spec.schedule
     - name: Time zone
       type: string
       description: The time zone the interval of a TZCronJob is calculated in
-      JSONPath: .spec.timezone
+      jsonPath: .spec.timezone
     - name: Last schedule
       type: date
       description: The last time a Job was scheduled by a TZCronJob
-      JSONPath: .status.lastScheduleTime
+      jsonPath: .status.lastScheduleTime
     - name: Age
       type: date
-      JSONPath: .metadata.creationTimestamp
+      jsonPath: .metadata.creationTimestamp    
     name: v1alpha1
     served: true
     storage: true      
