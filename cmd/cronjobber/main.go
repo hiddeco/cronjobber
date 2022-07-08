@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
 	"log"
 	"time"
 	_ "time/tzdata"
@@ -12,7 +12,7 @@ import (
 	"github.com/hiddeco/cronjobber/pkg/controller/cronjobber"
 	"github.com/hiddeco/cronjobber/pkg/logging"
 	"github.com/hiddeco/cronjobber/pkg/version"
-	"github.com/knative/pkg/signals"
+	"knative.dev/pkg/signals"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 )
