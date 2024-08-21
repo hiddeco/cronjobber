@@ -8,6 +8,14 @@
 
 Cronjobber is the cronjob controller from Kubernetes patched with time zone support.
 
+## ⚠️ Archived
+
+Since Kubernetes 1.27, timezone support for CronJobs has been available as a
+[stable feature](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#time-zones),
+making this project obsolete. As a result, the project has been archived.
+
+Thanks for all the fish, and happy scheduling!
+
 ## Installation
 
 ```sh
