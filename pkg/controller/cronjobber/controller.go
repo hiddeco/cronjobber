@@ -330,7 +330,7 @@ func syncOne(sj *cronjobberv1.TZCronJob, js []batchv1.Job, now time.Time, jc job
 		}
 	}
 
-	jobReq, err := getJobFromTemplate(sj, scheduledTime)
+	jobReq, err := getJobFromTemplate(sj)
 	if err != nil {
 		logger.Errorf("Unable to make Job from template in %s: %v", nameForLog, err)
 		return
