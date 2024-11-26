@@ -41,6 +41,10 @@ var (
 	AddToScheme   = SchemeBuilder.AddToScheme
 )
 
+func init() {
+	SchemeBuilder.Register(RegisterDefaults)
+}
+
 // Adds the list of known types to the given scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // +k8s:deepcopy-gen=package
-
+// +k8s:defaulter-gen=TypeMeta
 // Package v1alpha1 is the v1alpha1 of the API.
 // +groupName=cronjobber.hidde.co
 package v1alpha1
