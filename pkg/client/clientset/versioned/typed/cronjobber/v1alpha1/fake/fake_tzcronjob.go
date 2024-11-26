@@ -39,7 +39,7 @@ var tzcronjobsResource = schema.GroupVersionResource{Group: "cronjobber.hidde.co
 var tzcronjobsKind = schema.GroupVersionKind{Group: "cronjobber.hidde.co", Version: "v1alpha1", Kind: "TZCronJob"}
 
 // Get takes name of the tZCronJob, and returns the corresponding tZCronJob object, and an error if there is any.
-func (c *FakeTZCronJobs) Get(name string, options v1.GetOptions) (result *v1alpha1.TZCronJob, err error) {
+func (c *FakeTZCronJobs) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.TZCronJob, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewGetAction(tzcronjobsResource, c.ns, name), &v1alpha1.TZCronJob{})
 
@@ -50,7 +50,7 @@ func (c *FakeTZCronJobs) Get(name string, options v1.GetOptions) (result *v1alph
 }
 
 // List takes label and field selectors, and returns the list of TZCronJobs that match those selectors.
-func (c *FakeTZCronJobs) List(opts v1.ListOptions) (result *v1alpha1.TZCronJobList, err error) {
+func (c *FakeTZCronJobs) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.TZCronJobList, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewListAction(tzcronjobsResource, tzcronjobsKind, c.ns, opts), &v1alpha1.TZCronJobList{})
 
@@ -72,14 +72,14 @@ func (c *FakeTZCronJobs) List(opts v1.ListOptions) (result *v1alpha1.TZCronJobLi
 }
 
 // Watch returns a watch.Interface that watches the requested tZCronJobs.
-func (c *FakeTZCronJobs) Watch(opts v1.ListOptions) (watch.Interface, error) {
+func (c *FakeTZCronJobs) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
 	return c.Fake.
 		InvokesWatch(testing.NewWatchAction(tzcronjobsResource, c.ns, opts))
 
 }
 
 // Create takes the representation of a tZCronJob and creates it.  Returns the server's representation of the tZCronJob, and an error, if there is any.
-func (c *FakeTZCronJobs) Create(tZCronJob *v1alpha1.TZCronJob) (result *v1alpha1.TZCronJob, err error) {
+func (c *FakeTZCronJobs) Create(ctx context.Context, tZCronJob *v1alpha1.TZCronJob) (result *v1alpha1.TZCronJob, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewCreateAction(tzcronjobsResource, c.ns, tZCronJob), &v1alpha1.TZCronJob{})
 
@@ -90,7 +90,7 @@ func (c *FakeTZCronJobs) Create(tZCronJob *v1alpha1.TZCronJob) (result *v1alpha1
 }
 
 // Update takes the representation of a tZCronJob and updates it. Returns the server's representation of the tZCronJob, and an error, if there is any.
-func (c *FakeTZCronJobs) Update(tZCronJob *v1alpha1.TZCronJob) (result *v1alpha1.TZCronJob, err error) {
+func (c *FakeTZCronJobs) Update(ctx context.Context, tZCronJob *v1alpha1.TZCronJob) (result *v1alpha1.TZCronJob, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateAction(tzcronjobsResource, c.ns, tZCronJob), &v1alpha1.TZCronJob{})
 
@@ -102,7 +102,7 @@ func (c *FakeTZCronJobs) Update(tZCronJob *v1alpha1.TZCronJob) (result *v1alpha1
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *FakeTZCronJobs) UpdateStatus(tZCronJob *v1alpha1.TZCronJob) (*v1alpha1.TZCronJob, error) {
+func (c *FakeTZCronJobs) UpdateStatus(ctx context.Context, tZCronJob *v1alpha1.TZCronJob) (*v1alpha1.TZCronJob, error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateSubresourceAction(tzcronjobsResource, "status", c.ns, tZCronJob), &v1alpha1.TZCronJob{})
 
@@ -113,7 +113,7 @@ func (c *FakeTZCronJobs) UpdateStatus(tZCronJob *v1alpha1.TZCronJob) (*v1alpha1.
 }
 
 // Delete takes name of the tZCronJob and deletes it. Returns an error if one occurs.
-func (c *FakeTZCronJobs) Delete(name string, options *v1.DeleteOptions) error {
+func (c *FakeTZCronJobs) Delete(ctx context.Context, name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
 		Invokes(testing.NewDeleteAction(tzcronjobsResource, c.ns, name), &v1alpha1.TZCronJob{})
 
@@ -121,7 +121,7 @@ func (c *FakeTZCronJobs) Delete(name string, options *v1.DeleteOptions) error {
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *FakeTZCronJobs) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+func (c *FakeTZCronJobs) DeleteCollection(ctx context.Context, options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	action := testing.NewDeleteCollectionAction(tzcronjobsResource, c.ns, listOptions)
 
 	_, err := c.Fake.Invokes(action, &v1alpha1.TZCronJobList{})
@@ -129,7 +129,7 @@ func (c *FakeTZCronJobs) DeleteCollection(options *v1.DeleteOptions, listOptions
 }
 
 // Patch applies the patch and returns the patched tZCronJob.
-func (c *FakeTZCronJobs) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.TZCronJob, err error) {
+func (c *FakeTZCronJobs) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.TZCronJob, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(tzcronjobsResource, c.ns, name, pt, data, subresources...), &v1alpha1.TZCronJob{})
 

@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/robfig/cron"
+	"github.com/robfig/cron/v3"
 	"go.uber.org/zap"
 
 	cronjobberv1 "github.com/hiddeco/cronjobber/pkg/apis/cronjobber/v1alpha1"

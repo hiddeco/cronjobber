@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.15
+ARG GO_VERSION=1.18
 
 FROM golang:${GO_VERSION}-alpine AS builder
 
@@ -7,12 +7,10 @@ RUN mkdir /user \
     && echo 'daemon:x:2:' > /user/group
 
 RUN apk add --no-cache ca-certificates git
-RUN go get -u github.com/golang/dep/cmd/dep
 
 WORKDIR ${GOPATH}/src/github.com/hiddeco/cronjobber
 
-COPY ./Gopkg.toml ./Gopkg.lock ./
-RUN dep ensure -vendor-only
+COPY ./go.mod go.sum ./
 
 COPY . ./
 

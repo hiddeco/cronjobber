@@ -5,4 +5,4 @@
 !/cmd/**
 !/pkg/**
 !Dockerfile
-!Gopkg.*
+!go.*

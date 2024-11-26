@@ -19,6 +19,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"context"
 	time "time"
 
 	cronjobberv1alpha1 "github.com/hiddeco/cronjobber/pkg/apis/cronjobber/v1alpha1"
@@ -61,13 +62,13 @@ func NewFilteredTZCronJobInformer(client versioned.Interface, namespace string, 
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.CronjobberV1alpha1().TZCronJobs(namespace).List(options)
+				return client.CronjobberV1alpha1().TZCronJobs(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.CronjobberV1alpha1().TZCronJobs(namespace).Watch(options)
+				return client.CronjobberV1alpha1().TZCronJobs(namespace).Watch(context.TODO(), options)
 			},
 		},
 		&cronjobberv1alpha1.TZCronJob{},
