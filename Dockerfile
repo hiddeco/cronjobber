@@ -1,59 +1,27 @@
-ARG GO_VERSION=1.15
+# Build the manager binary
+FROM golang:1.17 as builder
 
-FROM golang:${GO_VERSION}-alpine AS builder
+WORKDIR /workspace
+# Copy the Go Modules manifests
+COPY go.mod go.mod
+COPY go.sum go.sum
+# cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+RUN go mod download
 
-RUN mkdir /user \
-    && echo 'daemon:x:2:2:daemon:/:' > /user/passwd \
-    && echo 'daemon:x:2:' > /user/group
+# Copy the go source
+COPY main.go main.go
+COPY api/ api/
+COPY controllers/ controllers/
 
-RUN apk add --no-cache ca-certificates git
-RUN go get -u github.com/golang/dep/cmd/dep
+# Build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o manager main.go
 
-WORKDIR ${GOPATH}/src/github.com/hiddeco/cronjobber
+# Use distroless as minimal base image to package the manager binary
+# Refer to https://github.com/GoogleContainerTools/distroless for more details
+FROM gcr.io/distroless/static:nonroot
+WORKDIR /
+COPY --from=builder /workspace/manager .
+USER 65532:65532
 
-COPY ./Gopkg.toml ./Gopkg.lock ./
-RUN dep ensure -vendor-only
-
-COPY . ./
-
-ARG VERSION
-ARG VCS_REF
-
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w \
-       -X github.com/hiddeco/cronjobber/pkg/version.VERSION=${VERSION} \
-       -X github.com/hiddeco/cronjobber/pkg/version.REVISION=${VCS_REF}" \
-       -a -installsuffix 'static' -o /cronjobber ./cmd/cronjobber/*
-
-FROM scratch AS cronjobber
-
-# Static labels
-LABEL maintainer="Hidde Beydals <hello@hidde.co>" \
-      org.opencontainers.image.title="cronjobber" \
-      org.opencontainers.image.description="Cronjobber is the Kubernetes cronjob controller patched with time zone support" \
-      org.opencontainers.image.url="https://github.com/hiddeco/cronjobber" \
-      org.opencontainers.image.source="git@github.com:hiddeco/cronjobber" \
-      org.opencontainers.image.vendor="Hidde Beydals" \
-      org.label-schema.schema-version="1.0" \
-      org.label-schema.name="cronjobber" \
-      org.label-schema.description="Cronjobber is the Kubernetes cronjob controller patched with time zone support" \
-      org.label-schema.url="https://github.com/hiddeco/cronjobber" \
-      org.label-schema.vcs-url="git@github.com:hiddeco/cronjobber" \
-      org.label-schema.vendor="Hidde Beydals"
-
-COPY --from=builder /user/group /user/passwd /etc/
-COPY --from=builder /cronjobber /cronjobber
-
-USER daemon:daemon
-
-ENTRYPOINT ["/cronjobber"]
-
-ARG VCS_REF
-ARG BUILD_DATE
-
-# Dynamic labels
-# Besides being informative these will also ensure each
-# build ends up with a unique hash.
-LABEL org.opencontainers.image.revision="$VCS_REF" \
-      org.opencontainers.image.created="$BUILD_DATE" \
-      org.label-schema.vcs-ref="$VCS_REF" \
-      org.label-schema.build-date="$BUILD_DATE"
+ENTRYPOINT ["/manager"]

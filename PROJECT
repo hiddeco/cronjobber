@@ -1,0 +1,16 @@
+domain: hidde.co
+layout:
+- go.kubebuilder.io/v3
+projectName: cronjobber
+repo: github.com/hiddeco/cronjobber
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: hidde.co
+  group: cronjobber
+  kind: TZCronJob
+  path: github.com/hiddeco/cronjobber/api/v1alpha1
+  version: v1alpha1
+version: "3"
